@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Books for student</title>
+</head>
+<body>
+<div th:each="book : ${books}">
+    <a th:href="@{/books/infoStudent/{id}(id=${book.getId()})}"
+       th:text="${book.getTitle() + ', ' + book.getAuthor()}">book</a>
+    <form th:method="PATCH" th:action="@{/students/{idStudent}/{idBook}(idStudent=${student.getId()}, idBook=${book.getId()})}">
+        <input type="submit" value="Add in cart"/>
+    </form>
+</div>
+<br/>
+<hr/>
+</body>
+</html>
