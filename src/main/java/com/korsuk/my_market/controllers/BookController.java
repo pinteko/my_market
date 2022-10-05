@@ -9,8 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/books")
 public class BookController {
@@ -19,23 +20,40 @@ public class BookController {
     private final StudentService studentService;
 
     @GetMapping()
-    public String index(Model model) {
-        //получим всех людей из DAO  и передадим на отображение и представление
-        model.addAttribute("books", bookService.getAllBooks());
-        return "showBooks";
+    public List<Book> getBooks() {
+        return bookService.getAllBooks();
+    }
+
+    @GetMapping("/change_rating")
+    public void changeRating(@RequestParam Integer bookId, @RequestParam Double delta){
+        bookService.changeScore(bookId, delta);
+    }
+
+    @DeleteMapping("/delete_book")
+    public void deleteBook(@RequestParam Integer bookId){
+        bookService.deleteBook(bookId);
+    }
+
+    @GetMapping("/new_book")
+    public String newBook(){
+        return "/newBook.html";
+    }
+
+    @PostMapping("/form_book")
+    public void formBook(@RequestParam String title, @RequestParam String author,
+                           @RequestParam Double rating, @RequestParam Double price){
+        bookService.addBook(title, author, rating, price);
     }
 
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        //получим одного человека по его id из DAO и передадим на отображение и представление
         model.addAttribute("book", bookService.getBookById(id));
         return "infoBook";
     }
 
     @GetMapping("/infoStudent/{id}")
     public String showForStudent(@PathVariable("id") int id, Model model) {
-        //получим одного человека по его id из DAO и передадим на отображение и представление
         model.addAttribute("book", bookService.getBookById(id));
         return "infoBookForStudent";
     }
@@ -67,7 +85,7 @@ public class BookController {
         return "updateBook";
     }
 
-    @PatchMapping("/{id}/edit")
+    @PostMapping("/{id}/edit")
     public String update(@ModelAttribute("book") @Valid Book book,
                          BindingResult bindingResult, @PathVariable("id") int id) {
         if(bindingResult.hasErrors())

@@ -15,7 +15,7 @@ import java.util.Objects;
 @Repository
 public class BookRepository {
     private List<Book> books;
-    private int id;
+    private Integer id;
 
     @PostConstruct
     public void init() {
@@ -47,15 +47,15 @@ public class BookRepository {
 
     public void deleteBook(int id) {
         if (id > 0 && id <= books.size()) {
-            books.remove(books.get(id)); }
+            books.remove(books.get(id - 1)); }
     }
 
     public void updateBook(int id, String title, String author, double rating, double price) {
         if (id > 0 && id <= books.size()) {
-            books.get(id).setTitle(title);
-            books.get(id).setAuthor(author);
-            books.get(id).setRating(rating);
-            books.get(id).setPrice(price);
+            books.get(id - 1).setTitle(title);
+            books.get(id - 1).setAuthor(author);
+            books.get(id - 1).setRating(rating);
+            books.get(id - 1).setPrice(price);
         }
     }
 

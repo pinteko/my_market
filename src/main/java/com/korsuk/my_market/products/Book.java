@@ -6,12 +6,13 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.text.DecimalFormat;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Book {
-    private int id;
+    private Integer id;
 
     @NotEmpty(message = "Title should not be empty")
     @Size(min = 2, max = 30, message = "Title should be between 2 and 30 characters")
@@ -22,10 +23,10 @@ public class Book {
     private String author;
 
     @Min(value = 0, message = "Rating should be greater than 0")
-    private double rating;
+    private Double rating;
 
     @Min(value = 0, message = "Price should be greater than 0")
-    private double price;
+    private Double price;
 
     @Override
     public String toString() {
@@ -33,5 +34,11 @@ public class Book {
                 '\"' + title + '\"' +
                 " " + author + " (" +
                 "rating=" + rating + ").";
+    }
+
+    public Double getRating() {
+
+        Double formattedDouble = Double.valueOf(new DecimalFormat("#0.00").format(rating));
+        return formattedDouble;
     }
 }

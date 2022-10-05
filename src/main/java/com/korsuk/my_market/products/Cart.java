@@ -14,7 +14,9 @@ import java.util.List;
 public class Cart {
     List<Book> books;
 
-    public Cart() {}
+    public Cart() {
+        books = new ArrayList<>();
+    }
 
     @PostConstruct
     public void init() {

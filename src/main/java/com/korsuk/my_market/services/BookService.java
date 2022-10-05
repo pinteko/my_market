@@ -38,4 +38,8 @@ public class BookService {
         bookRepository.updateBook(id, title, author, rating, price);
     }
 
+    public void changeScore(Integer bookId, Double delta) {
+        Book book = bookRepository.findById(bookId);
+        book.setRating(book.getRating() + delta);
+    }
 }
