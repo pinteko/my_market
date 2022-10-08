@@ -1,6 +1,11 @@
 angular.module('app', []).controller('indexController', function ($scope, $http) {
     const contextPath = 'http://localhost:8189/app';
 
+    $scope.title = null;
+    $scope.author = null;
+    $scope.rating = null;
+    $scope.price = null;
+
     $scope.loadBooks = function () {
         $http.get(contextPath + '/books')
             .then(function (response) {
@@ -33,28 +38,25 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         });
     };
 
+    // document.getElementById('backMain').onclick = function() {
+    //     window.location.href = contextPath + '/books.html';
+    // };
+
+    $scope.addBook = function (title, author, rating, price){
+        let data = {title: title, author: author,  rating: rating, price: price};
+        alert(title.toString());
+        $http.post(contextPath + '/books/form_book', data)
+            .success(function (response){
+                alert("пришло после поста");
+            window.location.href ='http://localhost:8189/app/books.html';
+        });
+    };
+
     document.getElementById('newBook').onclick = function() {
         window.location.href = contextPath + '/newBook.html';
     };
 
 
-    $scope.addBook = function (title, author, rating, price){
-        $http({
-            url: contextPath + '/books/form_book',
-            method: 'POST',
-            params: {
-                // title: document.getElementById('title').getAttribute('title'),
-                // author: document.getElementById('author').getAttribute('author'),
-                // rating: document.getElementById('rating').getAttribute('rating'),
-                // price: document.getElementById('price').getAttribute('price')
-            },
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).then(
-                window.location.href = contextPath + '/books.html'
-        );
-    };
 
     $scope.loadBooks();
 

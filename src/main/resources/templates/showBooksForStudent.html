@@ -8,7 +8,7 @@
 <div th:each="book : ${books}">
     <a th:href="@{/books/infoStudent/{id}(id=${book.getId()})}"
        th:text="${book.getTitle() + ', ' + book.getAuthor()}">book</a>
-    <form th:method="PATCH" th:action="@{/students/{idStudent}/{idBook}(idStudent=${student.getId()}, idBook=${book.getId()})}">
+    <form th:action="@{/students/{idStudent}/{idBook}(idStudent=${student.getId()}, idBook=${book.getId()})}" method="post">
         <input type="submit" value="Add in cart"/>
     </form>
 </div>

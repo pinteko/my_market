@@ -40,9 +40,9 @@ public class BookController {
     }
 
     @PostMapping("/form_book")
-    public void formBook(@RequestParam String title, @RequestParam String author,
-                           @RequestParam Double rating, @RequestParam Double price){
-        bookService.addBook(title, author, rating, price);
+    public Book formBook(@RequestParam(name = "title") String title, @RequestParam(name = "author") String author,
+                           @RequestParam(name = "rating") Double rating, @RequestParam(name = "price") Double price){
+       return bookService.addBook(title, author, rating, price);
     }
 
 

@@ -14,7 +14,7 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public Book getBookById (int id) {
+    public Book getBookById (Integer id) {
         return bookRepository.findById(id);
     }
 
@@ -26,15 +26,15 @@ public class BookService {
         return bookRepository.getBooks();
     }
 
-    public void addBook(String title, String author, double rating, double price) {
-        bookRepository.addBook(title, author, rating, price);
+    public Book addBook(String title, String author, Double rating, Double price) {
+      return bookRepository.addBook(title, author, rating, price);
     }
 
-    public void deleteBook(int id) {
+    public void deleteBook(Integer id) {
         bookRepository.deleteBook(id);
     }
 
-    public void updateBook(int id, String title, String author, double rating, double price) {
+    public void updateBook(Integer id, String title, String author, Double rating, Double price) {
         bookRepository.updateBook(id, title, author, rating, price);
     }
 

@@ -1,35 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
+<html ng-app="app">
+
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
     <script src="books.js"></script>
     <title>Add book</title>
 </head>
 <body>
-<form class="container" ng-controller="indexController" id="formNewBook">
-    <h2>Enter the book details</h2>
+<form class="container" id="formNewBook" ng-controller="indexController">
+    <h3>Enter the book details</h3>
 <div class="input-group mb-3">
     <span class="input-group-text" id="title">Title</span>
-    <input type="text" class="form-control" placeholder="Title" aria-label="Title" aria-describedby="title">
+    <input type="text" class="form-control"
+           ng-model="title" placeholder="Title" aria-label="Title" />
 </div>
 <div class="input-group mb-3">
     <span class="input-group-text" id="author">Author</span>
-    <input type="text" class="form-control" placeholder="Author" aria-label="Author" aria-describedby="author">
+    <input type="text" class="form-control"
+           ng-model="author" placeholder="Author" aria-label="Author" />
 </div>
 <div class="input-group mb-3">
     <span class="input-group-text" id="rating">Rating</span>
-    <input type="text" class="form-control" placeholder="Rating" aria-label="Rating" aria-describedby="rating">
+    <input type="number" class="form-control"
+           ng-model="rating" placeholder="Rating" aria-label="Rating" />
 </div>
 <div class="input-group mb-3">
     <span class="input-group-text" id="price">Price</span>
-    <input type="text" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="price">
+    <input type="number" class="form-control"
+           ng-model="price" placeholder="Price" aria-label="Price" />
 </div>
-    <button class="btn btn-primary" ng-click="addBook()">Add</button>
+    <button class="btn btn-primary" ng-click="addBook(title, author, rating, price)" id="backMain">Add</button>
 </form>
 </body>
 </html>
