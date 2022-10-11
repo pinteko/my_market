@@ -15,7 +15,7 @@ import java.util.Objects;
 @Repository
 public class BookRepository {
     private List<Book> books;
-    private int id;
+    private Integer id;
 
     @PostConstruct
     public void init() {
@@ -29,8 +29,8 @@ public class BookRepository {
         id = 5;
     }
 
-    public Book findById(int id) {
-        return books.stream().filter(p -> Objects.equals(p.getId(), id)).findFirst().orElse(new Book());
+    public Book findById(Integer id) {
+        return books.stream().filter(p -> p.getId().equals(id)).findFirst().orElse(new Book());
     }
 
     public Book findByTitle(String title) {
@@ -41,21 +41,22 @@ public class BookRepository {
         return books;
     }
 
-    public void addBook(String title, String author, double rating, double price) {
-        books.add(new Book(++id, title, author, rating, price));
+    public Book addBook(String title, String author, Double rating, Double price) {
+        Book book = new Book(++id, title, author, rating, price);
+        books.add(book);
+        return book;
     }
 
-    public void deleteBook(int id) {
-        if (id > 0 && id <= books.size()) {
-            books.remove(books.get(id)); }
+    public void deleteBook(Integer id) {
+        books.removeIf(b -> b.getId().equals(id));
     }
 
-    public void updateBook(int id, String title, String author, double rating, double price) {
+    public void updateBook(Integer id, String title, String author, Double rating, Double price) {
         if (id > 0 && id <= books.size()) {
-            books.get(id).setTitle(title);
-            books.get(id).setAuthor(author);
-            books.get(id).setRating(rating);
-            books.get(id).setPrice(price);
+            books.get(id - 1).setTitle(title);
+            books.get(id - 1).setAuthor(author);
+            books.get(id - 1).setRating(rating);
+            books.get(id - 1).setPrice(price);
         }
     }
 

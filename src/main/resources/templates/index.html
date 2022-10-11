@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>All people</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<a href="/app/students/">Show students</a></body>
-<a href="/app/books/">Show books</a></body>
+<!--<button type="button" class="btn btn-primary" th:href="/app/students/">Show students</button>-->
+<!--<button type="button" class="btn btn-secondary" th:href="/app/books/">Show books</button>-->
+<a class="btn btn-primary" href="/app/students/" role="button">Show students</a>
+<a class="btn btn-primary" href="/app/books/" role="button">Show books</a>
+</body>
 </html>

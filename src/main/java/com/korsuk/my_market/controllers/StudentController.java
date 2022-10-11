@@ -21,7 +21,6 @@ public class StudentController {
 
     @GetMapping()
     public String index(Model model) {
-        //получим всех людей из DAO  и передадим на отображение и представление
         model.addAttribute("students", studentService.getAllStudent());
         return "showStudents";
     }
@@ -29,14 +28,12 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        //получим одного человека по его id из DAO и передадим на отображение и представление
         model.addAttribute("student", studentService.getStudent(id));
         return "infoStudent";
     }
 
     @GetMapping("/{id}/showCart")
     public String showCart(@PathVariable("id") int id, Model model) {
-        //получим одного человека по его id из DAO и передадим на отображение и представление
         model.addAttribute("student", studentService.getStudent(id));
         return "showCart";
     }
@@ -69,7 +66,7 @@ public class StudentController {
         return "updateStudent";
     }
 
-    @PatchMapping("/{id}/edit")
+    @PostMapping("/{id}/edit")
     public String update(@ModelAttribute("student") @Valid Student student,
                          BindingResult bindingResult, @PathVariable("id") int id) {
         if(bindingResult.hasErrors())
@@ -86,11 +83,11 @@ public class StudentController {
         return "showBooksForStudent";
     }
 
-    @PatchMapping("/{idStudent}/{idBook}")
+    @PostMapping("/{idStudent}/{idBook}")
     public String addBook(@PathVariable("idStudent") int idSt,
                           @PathVariable("idBook") int idBk) {
         studentService.getStudent(idSt).getCart().addBook(bookService.getBookById(idBk));
-        return "showBooksForStudent";
+        return "redirect:/students/{idStudent}/addBook";
     }
 
 
