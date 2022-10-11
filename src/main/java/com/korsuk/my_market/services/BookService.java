@@ -30,6 +30,10 @@ public class BookService {
       return bookRepository.addBook(title, author, rating, price);
     }
 
+    public Book addBook(Book book) {
+        return bookRepository.addBook(book);
+    }
+
     public void deleteBook(Integer id) {
         bookRepository.deleteBook(id);
     }
