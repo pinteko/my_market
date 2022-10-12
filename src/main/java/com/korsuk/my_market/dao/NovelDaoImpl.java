@@ -1,68 +1,71 @@
-package com.korsuk.my_market;
+package com.korsuk.my_market.dao;
 
+import com.korsuk.my_market.products.Author;
+import com.korsuk.my_market.products.Novel;
 import com.korsuk.my_market.products.Student;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-public class StudentDaoImpl implements StudentDao{
+@Component
+public class NovelDaoImpl implements NovelDao {
 
     private SessionFactoryUtils sessionFactoryUtils;
 
-    public StudentDaoImpl(SessionFactoryUtils sessionFactoryUtils) {
+    public NovelDaoImpl(SessionFactoryUtils sessionFactoryUtils) {
         this.sessionFactoryUtils = sessionFactoryUtils;
     }
 
     @Override
-    public Student findById(Integer id) {
+    public Novel findById(Long id) {
         try {
             EntityManager em = sessionFactoryUtils.getEntityManager();
             em.getTransaction().begin();
-            Student student = em.find(Student.class, id);
+            Novel novel = em.find(Novel.class, id);
 // Подтверждаем транзакцию
             em.getTransaction().commit();
-            return student;
+            return novel;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Student findByName(String name) {
+    public List<Novel> findByIdAuthor(Long id_author) {
         try {
             EntityManager em = sessionFactoryUtils.getEntityManager();
             em.getTransaction().begin();
-            Student student = em.createQuery("select s from Student s where s.name = :name", Student.class)
-                    .setParameter("name", name)
-                    .getSingleResult();
-            // Подтверждаем транзакцию
-            em.getTransaction().commit();
-            return student;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public List<Student> findAll() {
-        try {
-            EntityManager em = sessionFactoryUtils.getEntityManager();
-            em.getTransaction().begin();
-            List<Student> students = em.createQuery("select s from Student s").getResultList();
+            List<Novel> novels = em.createQuery("select n from Novel n where n.author.id = :id",
+                    Novel.class).setParameter("id", id_author).getResultList();
 // Подтверждаем транзакцию
             em.getTransaction().commit();
-            return students;
+            return novels;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void save(Student student) {
+    public List<Novel> findAll() {
         try {
             EntityManager em = sessionFactoryUtils.getEntityManager();
             em.getTransaction().begin();
-            em.persist(student);
+            List<Novel> novels = em.createQuery("select n from Novel n").getResultList();
+// Подтверждаем транзакцию
+            em.getTransaction().commit();
+            return novels;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void save(Novel novel) {
+        try {
+            EntityManager em = sessionFactoryUtils.getEntityManager();
+            em.getTransaction().begin();
+            em.persist(novel);
             em.getTransaction().commit();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -70,17 +73,14 @@ public class StudentDaoImpl implements StudentDao{
     }
 
     @Override
-    public void update(Integer id, String name) {
+    public void update(Long id, String title, Long id_author) {
         try {
             EntityManager em = sessionFactoryUtils.getEntityManager();
             em.getTransaction().begin();
-//            em.createQuery("update Student s set s.name = :name where s.id = :id", Student.class)
-//                    .setParameter("name", student.getName())
-//                    .setParameter("id", student.getId())
-//                    .executeUpdate();
-//            em.getTransaction().commit();
-            Student student = em.getReference(Student.class, id);
-            student.setName(name);
+            Novel novel = em.getReference(Novel.class, id);
+            novel.setTitle(title);
+            Author author = em.getReference(Author.class, id_author);
+            novel.setAuthor(author);
             em.getTransaction().commit();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -88,13 +88,27 @@ public class StudentDaoImpl implements StudentDao{
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         try {
             EntityManager em = sessionFactoryUtils.getEntityManager();
             em.getTransaction().begin();
-            Student student = findById(id);
-            em.remove(student);
+            Novel novel = findById(id);
+            em.remove(novel);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Student> studentsWhoRead(Long id_novel) {
+        try {
+            EntityManager em = sessionFactoryUtils.getEntityManager();
+            em.getTransaction().begin();
+            Novel novel = findById(id_novel);
+            List<Student> studentsWhoRead = novel.getStudents();
+            em.getTransaction().commit();
+            return studentsWhoRead;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
