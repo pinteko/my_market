@@ -43,6 +43,7 @@ public class BookController {
     public Book formBook(@RequestParam(name = "title") String title, @RequestParam(name = "author") String author,
                            @RequestParam(name = "rating") Double rating, @RequestParam(name = "price") Double price){
        return bookService.addBook(title, author, rating, price);
+//        return bookService.addBook(book);
     }
 
 

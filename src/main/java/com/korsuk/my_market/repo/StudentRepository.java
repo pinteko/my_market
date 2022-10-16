@@ -13,16 +13,16 @@ import java.util.Objects;
 @Repository
 public class StudentRepository {
     private List<Student> students;
-    private int id;
+    private Integer id;
 
     @PostConstruct
     public void init() {
-        students = new ArrayList<>(Arrays.asList(
-                new Student(1, "Bob", new Cart()),
-                new Student(2, "Jonh", new Cart()),
-                new Student(3, "Dave", new Cart())
-        ));
-        id = 3;
+//        students = new ArrayList<>(Arrays.asList(
+//                new Student(1, "Bob", new Cart()),
+//                new Student(2, "Jonh", new Cart()),
+//                new Student(3, "Dave", new Cart())
+//        ));
+//        id = 3;
     }
 
     public Student findById(int id) {
@@ -35,7 +35,7 @@ public class StudentRepository {
     }
 
     public void addStudent(String name) {
-        students.add(new Student(++id, name, new Cart()));
+//        students.add(new Student(++id, name, new Cart()));
     }
 
     public void deleteStudent(int id) {

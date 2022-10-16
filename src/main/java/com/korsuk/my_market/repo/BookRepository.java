@@ -46,6 +46,10 @@ public class BookRepository {
         books.add(book);
         return book;
     }
+    public Book addBook(Book book) {
+        books.add(book);
+        return book;
+    }
 
     public void deleteBook(Integer id) {
         books.removeIf(b -> b.getId().equals(id));

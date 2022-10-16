@@ -86,7 +86,7 @@ public class StudentController {
     @PostMapping("/{idStudent}/{idBook}")
     public String addBook(@PathVariable("idStudent") int idSt,
                           @PathVariable("idBook") int idBk) {
-        studentService.getStudent(idSt).getCart().addBook(bookService.getBookById(idBk));
+//        studentService.getStudent(idSt).getCart().addBook(bookService.getBookById(idBk));
         return "redirect:/students/{idStudent}/addBook";
     }
 
