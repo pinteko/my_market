@@ -1,7 +1,9 @@
 package com.korsuk.my_market.controllers;
 
+import com.korsuk.my_market.dto.NovelDto;
 import com.korsuk.my_market.products.Book;
 import com.korsuk.my_market.services.BookService;
+import com.korsuk.my_market.services.NovelService;
 import com.korsuk.my_market.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,7 +20,12 @@ public class BookController {
 
     private final BookService bookService;
     private final StudentService studentService;
+    private final NovelService novelService;
 
+    @GetMapping("/novels")
+    public List<NovelDto> getNovels() {
+        return novelService.getAllNovels();
+    }
     @GetMapping()
     public List<Book> getBooks() {
         return bookService.getAllBooks();

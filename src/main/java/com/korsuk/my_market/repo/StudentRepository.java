@@ -1,50 +1,24 @@
 package com.korsuk.my_market.repo;
 
-import com.korsuk.my_market.products.Cart;
 import com.korsuk.my_market.products.Student;
+import lombok.NonNull;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Repository
-public class StudentRepository {
-    private List<Student> students;
-    private Integer id;
+public interface StudentRepository extends JpaRepository<Student, Long> {
 
-    @PostConstruct
-    public void init() {
-//        students = new ArrayList<>(Arrays.asList(
-//                new Student(1, "Bob", new Cart()),
-//                new Student(2, "Jonh", new Cart()),
-//                new Student(3, "Dave", new Cart())
-//        ));
-//        id = 3;
-    }
+    List<Student> findAll();
 
-    public Student findById(int id) {
-        return students.stream().filter(p -> Objects.equals(p.getId(), id)).findFirst()
-                .orElseThrow(() -> new RuntimeException("Студент не найден"));
-    }
+    Student findStudentById(Long id);
 
-    public List<Student> getStudents(){
-        return students;
-    }
+    Student findStudentByName(String name);
 
-    public void addStudent(String name) {
-//        students.add(new Student(++id, name, new Cart()));
-    }
+    void deleteStudentById(Long id);
 
-    public void deleteStudent(int id) {
-        if (id > 0 && id <= students.size()) {
-        students.remove(students.get(id)); }
-    }
-
-    public void updateStudent(int id, String name) {
-        if (id > 0 && id <= students.size()) {
-        students.get(id).setName(name); }
-    }
+//    @NonNull
+//    Student saveAndFlush (Student student);
 }

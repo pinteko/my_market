@@ -16,5 +16,7 @@
         <property name="hbm2ddl.auto">none</property>
         <property name="current_session_context_class">thread</property>
         <mapping class="com.korsuk.my_market.products.Student"/>
+        <mapping class="com.korsuk.my_market.products.Novel"/>
+        <mapping class="com.korsuk.my_market.products.Author"/>
     </session-factory>
 </hibernate-configuration>

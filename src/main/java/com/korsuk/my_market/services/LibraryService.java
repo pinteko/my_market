@@ -5,7 +5,6 @@ import com.korsuk.my_market.products.Student;
 import com.korsuk.my_market.repo.LibraryRepository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
 import java.util.List;
 
 @Service
@@ -17,7 +16,7 @@ public class LibraryService {
         this.libraryRepository = libraryRepository;
     }
 
-    public List<Novel> getReadNovels(Student student) {
+        public List<Novel> getReadNovels(Student student) {
             return libraryRepository.getReadNovels(student);
         }
 

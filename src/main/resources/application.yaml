@@ -10,8 +10,11 @@ spring:
       password: berbedos31
       driver-class-name: org.postgresql.Driver
     jpa:
-        database: postgresql
-        database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+      database: postgresql
+      database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+      show-sql: true
+    flyway:
+      baseline-on-migrate: true
 #for .properties
 #server.port=8189
 #server.servlet.context-path=/app
