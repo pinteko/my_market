@@ -1,7 +1,6 @@
 package com.korsuk.my_market.services;
 
 import com.korsuk.my_market.products.Book;
-import com.korsuk.my_market.products.Student;
 import com.korsuk.my_market.repo.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

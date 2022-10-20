@@ -1,10 +1,17 @@
 package com.korsuk.my_market.products;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "novels")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Novel {
 
     @Id
@@ -15,7 +22,7 @@ public class Novel {
     @Column(name = "title")
     private String title;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "author_id")
     private Author author;
 
@@ -25,52 +32,9 @@ public class Novel {
     inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<Student> students;
 
-    public Novel(Long id, String title, Author author) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-    }
+    @Column(name = "rating")
+    private Double rating;
 
-    public Novel() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
-    @Override
-    public String toString() {
-        return "Novel{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author=" + author +
-                '}';
-    }
+    @Column(name = "price")
+    private Double price;
 }
