@@ -60,7 +60,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     };
 
     document.getElementById('newBook').onclick = function() {
-        window.location.href = contextPath + '/newBook.html';
+        window.location.href = contextPath + '/newNovel.html';
     };
 
 

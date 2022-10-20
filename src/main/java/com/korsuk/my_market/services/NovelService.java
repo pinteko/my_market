@@ -2,12 +2,15 @@ package com.korsuk.my_market.services;
 
 import com.korsuk.my_market.dto.AuthorDto;
 import com.korsuk.my_market.dto.NovelDto;
+import com.korsuk.my_market.exceptions.ExistEntityException;
+import com.korsuk.my_market.products.Author;
 import com.korsuk.my_market.products.Novel;
 import com.korsuk.my_market.repo.NovelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,18 +21,16 @@ public class NovelService {
 
     public List<NovelDto> getAllNovels() {
        List<Novel> novels = novelRepository.findAll();
-       List<NovelDto> novelsDto = novels.stream().map(n -> new NovelDto(n.getId(),
-               n.getTitle(), new AuthorDto(n.getAuthor().getId(),
-               n.getAuthor().getName(), n.getAuthor().getSurname()), n.getRating(), n.getPrice())).collect(Collectors.toList());
+       List<NovelDto> novelsDto = novels.stream().map(NovelDto::new).collect(Collectors.toList());
        return novelsDto;
     }
 
     public NovelDto getNovelByIdDto(Long id) {
        Novel novel = novelRepository.findNovelById(id);
-       NovelDto novelDto = new NovelDto(novel.getId(), novel.getTitle(),
-               new AuthorDto(novel.getAuthor().getId(), novel.getAuthor().getName(), novel.getAuthor().getSurname()),
-               novel.getRating(), novel.getPrice());
-       return novelDto;
+       if (novel != null) {
+       NovelDto novelDto = new NovelDto(novel);
+       return novelDto;}
+       return null;
     }
 
     public Novel getNovelById(Long id) {
@@ -43,10 +44,15 @@ public class NovelService {
     public void changeRating(Long id, Double delta) {
         Novel novel = novelRepository.findNovelById(id);
         novel.setRating(novel.getRating() + delta);
-        novelRepository.saveAndFlush(novel);
+        novelRepository.save(novel);
     }
 
-    public Novel save(Novel novel) {
-        return novelRepository.saveAndFlush(novel);
+    public NovelDto save(Novel novel) {
+        if (novelRepository.existsNovelByTitle(novel.getTitle())) {
+            throw new ExistEntityException("This novel is already in library");
+        } else {
+            Novel novelSaved = novelRepository.saveAndFlush(novel);
+            return new NovelDto(novelSaved);
+        }
     }
 }

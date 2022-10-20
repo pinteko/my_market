@@ -43,7 +43,7 @@ public class BookController {
 
     @GetMapping("/new_book")
     public String newBook(){
-        return "/newBook.html";
+        return "/newNovel.html";
     }
 
     @PostMapping("/form_book")

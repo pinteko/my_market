@@ -1,5 +1,6 @@
 package com.korsuk.my_market.dto;
 
+import com.korsuk.my_market.products.Novel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class NovelDto {
 
     private Long id;
@@ -19,4 +19,12 @@ public class NovelDto {
     private Double rating;
 
     private Double price;
+
+    public NovelDto(Novel novel) {
+        this.id = novel.getId();
+        this.title = novel.getTitle();
+        this.author = new AuthorDto(novel.getAuthor());
+        this.rating = novel.getRating();
+        this.price = novel.getPrice();
+    }
 }
