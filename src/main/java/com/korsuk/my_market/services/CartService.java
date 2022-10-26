@@ -23,9 +23,7 @@ public class CartService {
     public List<NovelDto> novelsInCart() {
       List<Cart> carts = cartRepository.findAll();
       List<Novel> novels = carts.stream().map(Cart::getNovel).toList();
-      List<NovelDto> novelsDto = novels.stream().map(n -> new NovelDto(n.getId(),
-                n.getTitle(), new AuthorDto(n.getAuthor().getId(),
-                n.getAuthor().getName(), n.getAuthor().getSurname()), n.getRating(), n.getPrice())).collect(Collectors.toList());
+      List<NovelDto> novelsDto = novels.stream().map(NovelDto::new).collect(Collectors.toList());
       return novelsDto;
     }
 
@@ -35,6 +33,6 @@ public class CartService {
     }
 
     public Cart save(Cart cart) {
-       return cartRepository.saveAndFlush(cart);
+       return cartRepository.save(cart);
     }
 }
