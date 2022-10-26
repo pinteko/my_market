@@ -1,11 +1,50 @@
 angular.module('app', []).controller('novelController', function ($scope, $http) {
     const contextPath = 'http://localhost:8189/app';
 
-    $scope.loadBooks = function () {
-        $http.get(contextPath + '/novels')
-            .then(function (response) {
-                $scope.bookList = response.data;
+    let current_page = 1;
+    $scope.count_pages = 2;
+
+    $scope.loadBooks = function (page, min_rating, max_rating,
+                                 min_price, max_price, title_part, authorName_part) {
+        $http({
+            url: contextPath + '/novels',
+            method: 'GET',
+            params: {
+                p: page,
+                min_rating: min_rating,
+                max_rating: max_rating,
+                min_price: min_price,
+                max_price: max_price,
+                title_part: title_part,
+                authorName_part: authorName_part
+            }
+        }).then(function (response) {
+                console.log(response.data.content);
+                $scope.bookList = response.data.content;
             });
+    };
+
+    $scope.prevPage = function ()
+    {
+        if (current_page > 1) {
+            current_page--;
+            $scope.changePage(current_page);
+        }
+    };
+
+    $scope.goNextPage = function ()
+    {
+        if (current_page < $scope.count_pages) {
+            current_page++;
+            $scope.changePage(current_page);
+        }
+    };
+
+    $scope.changePage = function (page)
+    {
+        $scope.loadBooks(page, null, null, null, null, null, null);
+        current_page = page;
+        console.log(current_page);
     };
 
     $scope.changeRating = function (novel_id, delta){

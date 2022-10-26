@@ -37,8 +37,51 @@
             </td>
         </tbody>
     </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+            <li class="page-item">
+                <button class="page-link" ng-click="prevPage()" id="btn_prev">Previous</button>
+            </li>
+            <li class="page-item"><button class="page-link" ng-click="changePage(1)">1</button></li>
+            <li class="page-item"><button class="page-link" ng-click="changePage(2)">2</button></li>
+            <li class="page-item">
+                <button class="page-link" ng-click="goNextPage()" id="btn_next">Next</button>
+            </li>
+        </ul>
+    </nav>
     <button class="btn btn-primary" id="newNovel">Add new book</button>
     <button class="btn btn-primary" id="cart">My cart</button>
+    <form class="container" id="formNewBook" ng-submit="createNovel()" role="form" ng-controller="novelController">
+        <p> </p>
+        <h4>Create new book </h4>
+        <h4>Enter the book details:</h4>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="title">Title</span>
+            <input type="text" class="form-control"
+                   ng-model="newNovel.title" placeholder="Title" aria-label="Title" />
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="authorName">Author name</span>
+            <input type="text" class="form-control"
+                   ng-model="newNovel.authorName" placeholder="Author name" aria-label="Author name" />
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="authorSurname">Author surname</span>
+            <input type="text" class="form-control"
+                   ng-model="newNovel.authorSurname" placeholder="Author surname" aria-label="Author surname" />
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="rating">Rating</span>
+            <input type="number" class="form-control"
+                   ng-model="newNovel.rating" placeholder="Rating" aria-label="Rating" />
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="price">Price</span>
+            <input type="number" class="form-control"
+                   ng-model="newNovel.price" placeholder="Price" aria-label="Price" />
+        </div>
+        <button type="submit" class="btn btn-primary" id="backMain">Add</button>
+    </form>
 </div>
 </body>
 </html>
