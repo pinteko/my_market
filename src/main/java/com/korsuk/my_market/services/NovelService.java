@@ -46,6 +46,8 @@ public class NovelService {
             spec = spec.and(NovelSpecification.authorNameLike(authorNamePart));
         }
 
+        spec = spec.and(NovelSpecification.orderById());
+
        Page<Novel> pageNovels = novelRepository.findAll(spec, PageRequest.of(p - 1, 5));
 
         return pageNovels.map(this::convertToNovelDto);
