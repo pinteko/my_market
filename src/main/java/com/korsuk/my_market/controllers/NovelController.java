@@ -10,6 +10,7 @@ import com.korsuk.my_market.services.AuthorService;
 import com.korsuk.my_market.services.CartService;
 import com.korsuk.my_market.services.NovelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -27,8 +28,18 @@ public class NovelController {
 
 
     @GetMapping()
-    public List<NovelDto> getNovels() {
-        return novelService.getAllNovels();
+    public Page<NovelDto> getNovels(@RequestParam(name = "p", defaultValue = "1") Integer page,
+                                    @RequestParam(name = "min_rating", required = false) Double minRating,
+                                    @RequestParam(name = "max_rating", required = false) Double maxRating,
+                                    @RequestParam(name = "min_price", required = false) Double minPrice,
+                                    @RequestParam(name = "max_price", required = false) Double maxPrice,
+                                    @RequestParam(name = "title_part", required = false ) String titlePart,
+                                    @RequestParam(name = "authorName_part", required = false ) String authorNamePart) {
+//        return novelService.getAllNovels();
+        if (page < 1) {page = 1;}
+
+        return novelService.findNovels(page, minRating, maxRating, minPrice, maxPrice, titlePart, authorNamePart);
+
     }
 
     @GetMapping("/{id}")
