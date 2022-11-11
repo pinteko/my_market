@@ -2,22 +2,30 @@ package com.korsuk.my_market.services;
 
 import com.korsuk.my_market.dto.NovelDto;
 import com.korsuk.my_market.exceptions.ExistEntityException;
+import com.korsuk.my_market.products.Author;
 import com.korsuk.my_market.products.Novel;
 import com.korsuk.my_market.repo.NovelRepository;
+import com.korsuk.my_market.repo.specification.AuthorSpecification;
 import com.korsuk.my_market.repo.specification.NovelSpecification;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NovelService {
-
     private final NovelRepository novelRepository;
+    private final AuthorService authorService;
 
     public List<NovelDto> getAllNovels() {
        List<Novel> novels = novelRepository.findAll();
@@ -25,7 +33,16 @@ public class NovelService {
     }
 
     public Page<NovelDto> findNovels(Integer p, Double minRating, Double maxRating,
-                                  Double minPrice, Double maxPrice, String titlePart, String authorNamePart) {
+                                  Double minPrice, Double maxPrice, String titlePart, String name, String surname) {
+
+        List<Author> authors = new ArrayList<>();
+        log.info(name + "author name");
+        log.info(surname + "author surname");
+        if (name != null || surname != null) {
+            authors = authorService.findAuthors(name, surname);
+            log.info(authors.toString());
+        }
+
         Specification<Novel> spec = Specification.where(null);
         if (minRating != null) {
             spec = spec.and(NovelSpecification.ratingGreaterThanOrEqualTo(minRating));
@@ -42,8 +59,8 @@ public class NovelService {
         if (titlePart != null) {
             spec = spec.and(NovelSpecification.titleLike(titlePart));
         }
-        if (authorNamePart != null) {
-            spec = spec.and(NovelSpecification.authorNameLike(authorNamePart));
+        if (authors.size() > 0) {
+            spec = spec.and(NovelSpecification.authorLike(authors.get(0)));
         }
 
         spec = spec.and(NovelSpecification.orderById());

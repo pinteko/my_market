@@ -5,7 +5,7 @@ angular.module('app', []).controller('novelController', function ($scope, $http)
     $scope.count_pages = 2;
 
     $scope.loadBooks = function (page, min_rating, max_rating,
-                                 min_price, max_price, title_part, authorName_part) {
+                                 min_price, max_price, title_part, names, surname) {
         $http({
             url: contextPath + '/novels',
             method: 'GET',
@@ -16,11 +16,12 @@ angular.module('app', []).controller('novelController', function ($scope, $http)
                 min_price: min_price,
                 max_price: max_price,
                 title_part: title_part,
-                authorName_part: authorName_part
+                names: names,
+                surname: surname
             }
         }).then(function (response) {
-                console.log(response.data.content);
                 $scope.bookList = response.data.content;
+                console.log($scope.bookList);
             });
     };
 

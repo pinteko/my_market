@@ -4,17 +4,13 @@ import com.korsuk.my_market.dto.NovelDto;
 import com.korsuk.my_market.dto.NovelToSave;
 import com.korsuk.my_market.exceptions.ResourceNotFoundException;
 import com.korsuk.my_market.products.Author;
-import com.korsuk.my_market.products.Cart;
+import com.korsuk.my_market.services.CartNotEntity;
 import com.korsuk.my_market.products.Novel;
 import com.korsuk.my_market.services.AuthorService;
-import com.korsuk.my_market.services.CartService;
 import com.korsuk.my_market.services.NovelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +18,8 @@ import java.util.List;
 public class NovelController {
 
     private final NovelService novelService;
-    private final CartService cartService;
-
+//    private final CartService cartService;
+    private final CartNotEntity cartNotEntity;
     private final AuthorService authorService;
 
 
@@ -34,11 +30,12 @@ public class NovelController {
                                     @RequestParam(name = "min_price", required = false) Double minPrice,
                                     @RequestParam(name = "max_price", required = false) Double maxPrice,
                                     @RequestParam(name = "title_part", required = false ) String titlePart,
-                                    @RequestParam(name = "authorName_part", required = false ) String authorNamePart) {
+                                    @RequestParam(name = "names", required = false ) String name,
+                                    @RequestParam(name = "surname", required = false ) String surname) {
 //        return novelService.getAllNovels();
         if (page < 1) {page = 1;}
 
-        return novelService.findNovels(page, minRating, maxRating, minPrice, maxPrice, titlePart, authorNamePart);
+        return novelService.findNovels(page, minRating, maxRating, minPrice, maxPrice, titlePart, name, surname);
 
     }
 
@@ -61,10 +58,13 @@ public class NovelController {
 
     @GetMapping("/add_cart")
     public void addInCart(@RequestParam Long novel_id) {
-        Cart cart = new Cart();
-        cart.setNovel(novelService.getNovelById(novel_id));
-        cart.setDate(new Date(System.currentTimeMillis()));
-        cartService.save(cart);
+//        Cart cart = new Cart();
+//        cart.setNovel(novelService.getNovelById(novel_id));
+//        cart.setDate(new Date(System.currentTimeMillis()));
+//        cartService.save(cart);
+
+        NovelDto novelDto = new NovelDto(novelService.getNovelById(novel_id));
+        cartNotEntity.addInCart(novelDto);
 
     }
 
