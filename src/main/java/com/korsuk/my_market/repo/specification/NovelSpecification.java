@@ -1,10 +1,12 @@
 package com.korsuk.my_market.repo.specification;
 
+import com.korsuk.my_market.products.Author;
 import com.korsuk.my_market.products.Novel;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +32,10 @@ public class NovelSpecification {
         return ((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), String.format("%%%s%%", titlePart)));
     }
 
-    public static Specification<Novel> authorNameLike(String authorNamePart) {
-        return ((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("authorName"), String.format("%%%s%%", authorNamePart)));
+    public static Specification<Novel> authorLike(Author author) {
+        return ((root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("author"), author));
+
     }
 
     public static Specification<Novel> orderById() {

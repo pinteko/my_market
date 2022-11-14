@@ -15,6 +15,16 @@ spring:
       show-sql: true
     flyway:
       baseline-on-migrate: true
+logging:
+  level:
+    org.springframework.web: ERROR
+    com.korsuk: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level%logger{36} - %msg%n"
+  file.name: app.log
+  file.path: C:\my_market\src\main\resources\
+
 #for .properties
 #server.port=8189
 #server.servlet.context-path=/app
