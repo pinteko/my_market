@@ -46,6 +46,7 @@ public class NovelDto {
     }
     @Override
     public int hashCode() {
-        return (id == null ? 0 : id.hashCode());
+        final int someHash = 49;
+        return (id == null ? 0 : id.hashCode()) + someHash;
     }
 }

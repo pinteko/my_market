@@ -29,8 +29,9 @@
             <td>{{s.author.name}} {{s.author.surname}}</td>
             <td>{{s.price}}</td>
             <td>{{s.rating}}</td>
-            <td>{{s.count}}</td>
             <td>
+                <button class="btn btn-primary" ng-click="addNovel(s.id)">Add</button>
+                {{s.count}}
                 <button class="btn btn-danger" ng-click="deleteNovel(s.id)">Delete</button>
             </td>
         </tbody>

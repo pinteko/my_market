@@ -40,4 +40,8 @@ public class CartService {
     public Cart save(Cart cart) {
        return cartRepository.save(cart);
     }
+
+    public void addNovel(NovelDto novelDto) {
+        cartNotEntity.addInCart(novelDto);
+    }
 }

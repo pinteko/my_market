@@ -30,6 +30,18 @@ angular.module('app', []).controller('cartController', function ($scope, $http) 
         });
     };
 
+    $scope.addNovel = function (novel_id){
+        $http({
+            url: contextPath + '/cart/add_novel',
+            method: 'GET',
+            params: {
+                novel_id: novel_id,
+            }
+        }).then(function (response){
+            $scope.loadNovelsDto();
+        });
+    };
+
     // $scope.loadNovels();
     $scope.loadNovelsDto();
 

@@ -34,8 +34,16 @@ public class CartController {
     public void deleteBook(@RequestParam Long novel_id){
 //        novelService.getNovelById(novel_id);
         NovelDto novelDto = new NovelDto(novelService.getNovelById(novel_id));
-        log.info(novelDto.toString() + "from cartController");
+        log.info( "delete from cartController" + novelDto.toString());
         cartService.deleteFromCart(novelDto);
+    }
+
+    @GetMapping("/add_novel")
+    public void addBook(@RequestParam Long novel_id){
+//        novelService.getNovelById(novel_id);
+        NovelDto novelDto = new NovelDto(novelService.getNovelById(novel_id));
+        log.info("add from cartController" + novelDto.toString());
+        cartService.addNovel(novelDto);
     }
 
 
