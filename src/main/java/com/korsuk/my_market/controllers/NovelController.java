@@ -51,7 +51,7 @@ public class NovelController {
     }
 
 
-    @GetMapping("/change_rating")
+    @GetMapping("/edit/change_rating")
     public void changeRating(@RequestParam Long novel_id, @RequestParam Double delta){
         novelService.changeRating(novel_id, delta);
     }
@@ -68,13 +68,13 @@ public class NovelController {
 
     }
 
-    @DeleteMapping("/delete_novel")
+    @DeleteMapping("/edit/delete_novel")
     public void deleteBook(@RequestParam Long novel_id){
         novelService.deleteBookById(novel_id);
     }
 
 
-    @GetMapping("/new_novel")
+    @GetMapping("/edit/new_novel")
     public String newBook(){
         return "/newNovel.html";
     }
