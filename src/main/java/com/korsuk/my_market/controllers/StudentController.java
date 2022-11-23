@@ -1,17 +1,9 @@
 package com.korsuk.my_market.controllers;
 
 import com.korsuk.my_market.dto.StudentDto;
-import com.korsuk.my_market.products.Book;
-import com.korsuk.my_market.products.Student;
-import com.korsuk.my_market.repo.StudentRepository;
-import com.korsuk.my_market.services.BookService;
 import com.korsuk.my_market.services.StudentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,7 +12,6 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
-    private final BookService bookService;
 
 //    @GetMapping()
 //    public String index(Model model) {

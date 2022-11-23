@@ -1,7 +1,6 @@
-angular.module('app', []).controller('cartController', function ($scope, $http) {
+angular.module('app', []).controller('cartController', function ($scope, $rootScope, $http, $localStorage) {
     const contextPath = 'http://localhost:8189/app';
 
-    let map = new Map();
 
     $scope.loadNovels = function () {
         $http.get(contextPath + '/cart')
@@ -15,6 +14,13 @@ angular.module('app', []).controller('cartController', function ($scope, $http) 
             .then(function (response) {
                 $scope.cartList = response.data;
                 console.log($scope.cartList);
+            });
+    };
+
+    $scope.findStudents = function () {
+        $http.get(contextPath + '/students')
+            .then(function (response) {
+                $scope.studentList = response.data;
             });
     };
 
@@ -42,7 +48,6 @@ angular.module('app', []).controller('cartController', function ($scope, $http) 
         });
     };
 
-    // $scope.loadNovels();
     $scope.loadNovelsDto();
 
 });
