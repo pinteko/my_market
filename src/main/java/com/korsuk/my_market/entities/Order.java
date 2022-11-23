@@ -1,4 +1,4 @@
-package com.korsuk.my_market.products;
+package com.korsuk.my_market.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,35 +11,32 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "novels")
+@Table(name = "orders")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Novel {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "title")
-    private String title;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @ManyToOne()
-    @JoinColumn(name = "author_id")
-    private Author author;
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> items;
 
-    @ManyToMany
-    @JoinTable(name = "novel_readers",
-    joinColumns = @JoinColumn(name = "novel_id"),
-    inverseJoinColumns = @JoinColumn(name = "student_id"))
-    private List<Student> students;
+    @Column(name = "total_price")
+    private Double totalPrice;
 
-    @Column(name = "rating")
-    private Double rating;
+    @Column(name = "address")
+    private String address;
 
-    @Column(name = "price")
-    private Double price;
+    @Column(name = "phone")
+    private String phone;
 
     @CreationTimestamp
     @Column(name = "created_at")
