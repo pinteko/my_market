@@ -26,15 +26,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.
-                csrf().disable()
+        http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/novels").permitAll()
-                .antMatchers("/cart/*").hasRole("USER")
+                .antMatchers("/cart/**").hasRole("USER")
                 .antMatchers("/novels/users/**").hasRole("ADMIN")
                 .antMatchers("/students/**").hasAuthority("READ_PROFILE")
-                .antMatchers("/novels/edit/**").hasRole("ADMIN")
-                .antMatchers("/novels/edit/**").hasRole("MANAGER")
+                .antMatchers("/novels/**").hasRole("ADMIN")
+                .antMatchers("/novels/**").hasRole("MANAGER")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()

@@ -2,6 +2,7 @@ angular.module('app', ['ngStorage']).controller('novelController', function ($sc
     const contextPath = 'http://localhost:8189/app';
 
     if ($localStorage.springWebUser) {
+        console.log($localStorage.springWebUser);
         $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.springWebUser.token;
     }
 
@@ -64,11 +65,56 @@ angular.module('app', ['ngStorage']).controller('novelController', function ($sc
         });
     };
 
+    $scope.changeRating = function (novel_id, delta){
+        $http({
+            url: contextPath + '/novels/edit/change_rating',
+            method: 'GET',
+            params: {
+                novel_id: novel_id,
+                delta: delta
+            }
+        }).then(function (response){
+            $scope.loadBooks();
+        });
+    };
+
+
+    $scope.deleteNovel = function (novel_id){
+        $http({
+            url: contextPath + '/novels/edit/delete_novel',
+            method: 'DELETE',
+            params: {
+                novel_id: novel_id,
+            }
+        }).then(function (response){
+            $scope.loadBooks();
+        });
+    };
+
+    $scope.createNovel = function () {
+        console.log($scope.newNovel);
+        console.log($scope.author);
+        $http.post(contextPath + '/novels', $scope.newNovel)
+            .then(function (response) {
+                window.location.href = contextPath + '/novels.html';
+                $scope.loadBooks();
+            });
+    };
+
+    document.getElementById('newNovel').onclick = function() {
+        window.location.href = contextPath + '/newNovel.html';
+    };
+
     document.getElementById('cart').onclick = function() {
         window.location.href = contextPath + '/cart.html';
     };
 
+    document.getElementById('students').onclick = function() {
+        window.location.href = contextPath + '/students.html';
+    };
+
     $scope.tryToAuth = function () {
+        console.log($scope.user);
         $http.post(contextPath + '/auth', $scope.user)
             .then(function successCallback(response) {
                 if (response.data.token) {
@@ -106,6 +152,14 @@ angular.module('app', ['ngStorage']).controller('novelController', function ($sc
         }
     };
 
-    $scope.loadBooks();
+    // $scope.inspectAuth = function () {
+    //     $localStorage.springWebUser = {username: 'pinteko', token: 123};
+    //     console.log($localStorage.springWebUser);
+    // };
+
+        $scope.loadBooks();
+    // $scope.inspectAuth();
+
+
 
 });

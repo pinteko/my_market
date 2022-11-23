@@ -5,8 +5,6 @@ import com.korsuk.my_market.products.Student;
 import com.korsuk.my_market.repo.StudentRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

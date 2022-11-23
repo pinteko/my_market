@@ -4,7 +4,6 @@ import com.korsuk.my_market.entities.Role;
 import com.korsuk.my_market.entities.User;
 import com.korsuk.my_market.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
