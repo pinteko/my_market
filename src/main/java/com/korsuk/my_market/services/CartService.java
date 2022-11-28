@@ -1,47 +1,41 @@
 package com.korsuk.my_market.services;
 
-import com.korsuk.my_market.dto.NovelDto;
-import com.korsuk.my_market.products.Cart;
+import com.korsuk.my_market.dto.CartNotEntity;
+import com.korsuk.my_market.exceptions.ResourceNotFoundException;
 import com.korsuk.my_market.products.Novel;
-import com.korsuk.my_market.repo.CartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
 
 @Service
 @RequiredArgsConstructor
 public class CartService {
+    private final NovelService novelService;
 
-    private final CartRepository cartRepository;
-    private final CartNotEntity cartNotEntity;
+    private CartNotEntity cart;
 
-    public List<NovelDto> novelsInCart() {
-      List<Cart> carts = cartRepository.findAll();
-      List<Novel> novels = carts.stream().map(Cart::getNovel).toList();
-      List<NovelDto> novelsDto = novels.stream().map(NovelDto::new).collect(Collectors.toList());
-      return novelsDto;
+    @PostConstruct
+    public void init() {
+        cart = new CartNotEntity();
     }
 
-    public Set<NovelDto> novelsInCartNotEntity() {
-        return cartNotEntity.cartNovels(cartNotEntity.getNovelsInCart());
+    public CartNotEntity getCurrentCart() {
+        return cart;
     }
 
-//    @Transactional
-    public void deleteFromCart(NovelDto novelDto) {
-//        cartRepository.deleteCartByNovel_Id(id);
-        cartNotEntity.deleteFromCart(novelDto);
+    public void addNovelInCart(Long novelId) {
+        if (!getCurrentCart().isInCart(novelId)) {
+            Novel novel = novelService.getNovelById(novelId).orElseThrow(() -> new ResourceNotFoundException("Novel not found with id: " + novelId));
+            getCurrentCart().addInCart(novel);
+        }
     }
 
-    public Cart save(Cart cart) {
-       return cartRepository.save(cart);
+    public void clear() {
+        cart.clearCart();
     }
 
-    public void addNovel(NovelDto novelDto) {
-        cartNotEntity.addInCart(novelDto);
+    public void deleteFromCart(Long novelId) {
+        cart.deleteFromCart(novelId);
     }
 }

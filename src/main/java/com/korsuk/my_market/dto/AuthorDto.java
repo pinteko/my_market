@@ -15,9 +15,9 @@ public class AuthorDto {
 
     private String surname;
 
-    public AuthorDto(Author author) {
-        this.id = author.getId();
-        this.name = author.getName();
-        this.surname = author.getSurname();
+    public AuthorDto(Long id, String name, String surname) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
     }
 }

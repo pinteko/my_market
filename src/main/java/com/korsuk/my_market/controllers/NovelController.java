@@ -4,9 +4,10 @@ import com.korsuk.my_market.dto.NovelDto;
 import com.korsuk.my_market.dto.NovelToSave;
 import com.korsuk.my_market.exceptions.ResourceNotFoundException;
 import com.korsuk.my_market.products.Author;
-import com.korsuk.my_market.services.CartNotEntity;
+import com.korsuk.my_market.dto.CartNotEntity;
 import com.korsuk.my_market.products.Novel;
 import com.korsuk.my_market.services.AuthorService;
+import com.korsuk.my_market.services.CartService;
 import com.korsuk.my_market.services.NovelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,9 +19,9 @@ import org.springframework.web.bind.annotation.*;
 public class NovelController {
 
     private final NovelService novelService;
-//    private final CartService cartService;
-    private final CartNotEntity cartNotEntity;
     private final AuthorService authorService;
+
+    private final CartService cartService;
 
 
     @GetMapping()
@@ -62,9 +63,7 @@ public class NovelController {
 //        cart.setNovel(novelService.getNovelById(novel_id));
 //        cart.setDate(new Date(System.currentTimeMillis()));
 //        cartService.save(cart);
-
-        NovelDto novelDto = new NovelDto(novelService.getNovelById(novel_id));
-        cartNotEntity.addInCart(novelDto);
+        cartService.getCurrentCart().addInCart(novelService.getNovelById(novel_id).orElseThrow(() -> new ResourceNotFoundException("Novel not found with id: " + novel_id)));
 
     }
 

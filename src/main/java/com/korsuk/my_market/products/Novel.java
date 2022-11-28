@@ -48,4 +48,12 @@ public class Novel {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Novel(Long id, String title, Author author, Double rating, Double price) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.rating = rating;
+        this.price = price;
+    }
 }

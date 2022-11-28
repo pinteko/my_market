@@ -1,7 +1,9 @@
 package com.korsuk.my_market.services;
 
+import com.korsuk.my_market.converters.NovelConverter;
 import com.korsuk.my_market.dto.NovelDto;
 import com.korsuk.my_market.exceptions.ExistEntityException;
+import com.korsuk.my_market.exceptions.ResourceNotFoundException;
 import com.korsuk.my_market.products.Author;
 import com.korsuk.my_market.products.Novel;
 import com.korsuk.my_market.repo.NovelRepository;
@@ -15,9 +17,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,9 +31,11 @@ public class NovelService {
     private final NovelRepository novelRepository;
     private final AuthorService authorService;
 
+    private final NovelConverter novelConverter;
+
     public List<NovelDto> getAllNovels() {
        List<Novel> novels = novelRepository.findAll();
-       return novels.stream().map(NovelDto::new).collect(Collectors.toList());
+       return novels.stream().map(novelConverter::entityToDto).collect(Collectors.toList());
     }
 
     public Page<NovelDto> findNovels(Integer p, Double minRating, Double maxRating,
@@ -71,18 +77,15 @@ public class NovelService {
     }
 
     private NovelDto convertToNovelDto(Novel o) {
-        return new NovelDto(o);
+        return novelConverter.entityToDto(o);
     }
 
     public NovelDto getNovelByIdDto(Long id) {
-       Novel novel = novelRepository.findNovelById(id);
-       if (novel != null) {
-       return new NovelDto(novel);
-       }
-       return null;
+       Novel novel = novelRepository.findNovelById(id).orElseThrow(() -> new ResourceNotFoundException("Novel not found with id: " + id));
+        return novelConverter.entityToDto(novel);
     }
 
-    public Novel getNovelById(Long id) {
+    public Optional<Novel> getNovelById(Long id) {
         return novelRepository.findNovelById(id);
     }
 
@@ -90,18 +93,20 @@ public class NovelService {
         novelRepository.deleteById(id);
     }
 
+    @Transactional
     public void changeRating(Long id, Double delta) {
-        Novel novel = novelRepository.findNovelById(id);
+        Novel novel = novelRepository.findNovelById(id).orElseThrow(() -> new ResourceNotFoundException("Novel not found with id: " + id));
         novel.setRating(novel.getRating() + delta);
         novelRepository.save(novel);
     }
 
+    //work with method
     public NovelDto save(Novel novel) {
         if (novelRepository.existsNovelByTitle(novel.getTitle())) {
             throw new ExistEntityException("This novel is already in library");
         } else {
             Novel novelSaved = novelRepository.saveAndFlush(novel);
-            return new NovelDto(novelSaved);
+            return novelConverter.entityToDto(novelSaved);
         }
     }
 }

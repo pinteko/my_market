@@ -1,10 +1,5 @@
-angular.module('app', ['ngStorage']).controller('novelController', function ($scope, $rootScope, $http, $localStorage) {
+angular.module('market-front').controller('novelController', function ($scope, $http, $location, $localStorage) {
     const contextPath = 'http://localhost:8189/app';
-
-    if ($localStorage.springWebUser) {
-        console.log($localStorage.springWebUser);
-        $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.springWebUser.token;
-    }
 
     let current_page = 1;
     $scope.count_pages = 2;
@@ -78,6 +73,15 @@ angular.module('app', ['ngStorage']).controller('novelController', function ($sc
         });
     };
 
+    $scope.showCurrentUserInfo = function (){
+        $http({
+            url: contextPath + '/users/about_me',
+            method: 'GET'
+        }).then(function (response){
+            $scope.aboutMe = response.data;
+        });
+    };
+
 
     $scope.deleteNovel = function (novel_id){
         $http({
@@ -101,56 +105,44 @@ angular.module('app', ['ngStorage']).controller('novelController', function ($sc
             });
     };
 
-    document.getElementById('newNovel').onclick = function() {
-        window.location.href = contextPath + '/newNovel.html';
-    };
-
-    document.getElementById('cart').onclick = function() {
-        window.location.href = contextPath + '/cart.html';
-    };
-
-    document.getElementById('students').onclick = function() {
-        window.location.href = contextPath + '/students.html';
-    };
-
-    $scope.tryToAuth = function () {
-        console.log($scope.user);
-        $http.post(contextPath + '/auth', $scope.user)
-            .then(function successCallback(response) {
-                if (response.data.token) {
-                    $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
-                    $localStorage.springWebUser = {username: $scope.user.username, token: response.data.token};
-
-                    $scope.user.username = null;
-                    $scope.user.password = null;
-                }
-            }, function errorCallback(response) {
-
-            });
-    };
-
-    $scope.tryToLogout = function () {
-        $scope.clearUser();
-        if ($scope.user.username) {
-            $scope.user.username = null;
-        }
-        if ($scope.user.password) {
-            $scope.user.password = null;
-        }
-    };
-
-    $scope.clearUser = function () {
-        delete $localStorage.springWebUser;
-        $http.defaults.headers.common.Authorization = '';
-    };
-
-    $rootScope.isUserLoggedIn = function () {
-        if ($localStorage.springWebUser) {
-            return true;
-        } else {
-            return false;
-        }
-    };
+    // $scope.tryToAuth = function () {
+    //     console.log($scope.user);
+    //     $http.post(contextPath + '/auth', $scope.user)
+    //         .then(function successCallback(response) {
+    //             if (response.data.token) {
+    //                 $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
+    //                 $localStorage.springWebUser = {username: $scope.user.username, token: response.data.token};
+    //                 $scope.bearerExp = $localStorage.springWebUser;
+    //                 $scope.user.username = null;
+    //                 $scope.user.password = null;
+    //             }
+    //         }, function errorCallback(response) {
+    //
+    //         });
+    // };
+    //
+    // $scope.tryToLogout = function () {
+    //     $scope.clearUser();
+    //     if ($scope.user.username) {
+    //         $scope.user.username = null;
+    //     }
+    //     if ($scope.user.password) {
+    //         $scope.user.password = null;
+    //     }
+    // };
+    //
+    // $scope.clearUser = function () {
+    //     delete $localStorage.springWebUser;
+    //     $http.defaults.headers.common.Authorization = '';
+    // };
+    //
+    // $rootScope.isUserLoggedIn = function () {
+    //     if ($localStorage.springWebUser) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // };
 
     // $scope.inspectAuth = function () {
     //     $localStorage.springWebUser = {username: 'pinteko', token: 123};
