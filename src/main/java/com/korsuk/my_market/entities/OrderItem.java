@@ -1,5 +1,6 @@
-package com.korsuk.my_market.products;
+package com.korsuk.my_market.entities;
 
+import com.korsuk.my_market.products.Novel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,32 +12,30 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "novels")
+@Table(name = "order_items")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Novel {
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "title")
-    private String title;
+    @ManyToOne
+    @JoinColumn(name = "novel_id")
+    private Novel novel;
 
-    @ManyToOne()
-    @JoinColumn(name = "author_id")
-    private Author author;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-    @ManyToMany
-    @JoinTable(name = "novel_readers",
-    joinColumns = @JoinColumn(name = "novel_id"),
-    inverseJoinColumns = @JoinColumn(name = "student_id"))
-    private List<Student> students;
+    @Column(name = "quantity")
+    private Integer quantity;
 
-    @Column(name = "rating")
-    private Double rating;
+    @Column(name = "price_per_product")
+    private Double pricePerProduct;
 
     @Column(name = "price")
     private Double price;
@@ -48,4 +47,6 @@ public class Novel {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+
 }
