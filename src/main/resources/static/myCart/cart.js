@@ -1,67 +1,48 @@
-angular.module('market-front').controller('cartController', function ($scope, $rootScope, $http) {
-    const contextPath = 'http://localhost:8189/app';
+angular.module('market-front').controller('cartController', function ($scope, $rootScope, $http, $localStorage) {
+    const contextPath = 'http://localhost:8189/app/';
 
-    // $scope.loadNovels = function () {
-    //     $http.get(contextPath + '/cart')
-    //         .then(function (response) {
-    //             $scope.cartList = response.data;
-    //         });
-    // };
 
-    // $scope.loadCart = function () {
-    //     $http({
-    //         url: contextPath + '/cart',
-    //         method: 'GET'
-    //     }).then(function (response) {
-    //         $scope.cart = response.data;
-    //     });
-    // };
-
-    $scope.loadNovelsDto = function () {
-        $http.get(contextPath + '/cart/dto')
+    $scope.loadCart = function () {
+        $http.get(contextPath + 'cart/' + $localStorage.springWebGuestCartId)
             .then(function (response) {
-                $scope.cartList = response.data;
-                console.log($scope.cartList);
+                $scope.cart = response.data;
+                console.log($scope.cart);
             });
     };
 
-    $scope.findStudents = function () {
-        $http.get(contextPath + '/students')
-            .then(function (response) {
-                $scope.studentList = response.data;
-            });
-    };
-
-    $scope.deleteNovel = function (novel_id){
+    $scope.decrementNovel = function (novelId){
         $http({
-            url: contextPath + '/cart/delete_novel',
-            method: 'DELETE',
-            params: {
-                novel_id: novel_id,
-            }
+            url: contextPath + 'cart/' + $localStorage.springWebGuestCartId + '/decrement/' + novelId,
+            method: 'GET'
         }).then(function (response){
-            $scope.loadNovelsDto();
+            $scope.loadCart();
         });
     };
 
-    $scope.addNovel = function (novel_id){
+    $scope.deleteNovel = function (novelId){
         $http({
-            url: contextPath + '/cart/add_novel',
-            method: 'GET',
-            params: {
-                novel_id: novel_id,
-            }
+            url: contextPath + 'cart/' + $localStorage.springWebGuestCartId + '/remove/' + novelId,
+            method: 'DELETE'
         }).then(function (response){
-            $scope.loadNovelsDto();
+            $scope.loadCart();
+        });
+    };
+
+    $scope.addNovel = function (novelId){
+        $http({
+            url: contextPath + 'cart/' + $localStorage.springWebGuestCartId + '/add/' + novelId,
+            method: 'GET'
+        }).then(function (response){
+            $scope.loadCart();
         });
     };
 
     $scope.clearCart = function (){
         $http({
-            url: contextPath + '/novels/cart/clear_cart',
-            method: 'DELETE'
+            url: contextPath + 'cart/' + $localStorage.springWebGuestCartId + '/clear',
+            method: 'GET'
         }).then(function (response){
-            // $scope.loadBooks();
+            $scope.loadCart();
         });
     };
 
@@ -71,24 +52,15 @@ angular.module('market-front').controller('cartController', function ($scope, $r
 
     $scope.createOrder = function (){
         $http({
-            url: contextPath + '/orders',
+            url: contextPath + 'orders',
             method: 'POST',
             data: $scope.orderDetails
         }).then(function (response){
-            $scope.loadOrders();
-            $scope.loadNovelsDto();
+            $scope.loadCart();
             $scope.orderDetails = null;
         });
     };
 
-    $scope.loadOrders = function (){
-        $http.get(contextPath + '/orders')
-            .then(function (response) {
-                $scope.ordersList = response.data;
-            });
-    };
-
-    $scope.loadNovelsDto();
-    $scope.loadOrders();
+    $scope.loadCart();
 
 });

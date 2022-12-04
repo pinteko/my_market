@@ -4,38 +4,78 @@ import com.korsuk.my_market.dto.CartNotEntity;
 import com.korsuk.my_market.exceptions.ResourceNotFoundException;
 import com.korsuk.my_market.products.Novel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import java.util.UUID;
+import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
 public class CartService {
     private final NovelService novelService;
+    private final RedisTemplate<String, Object> redisTemplate;
+    //    private CartNotEntity cart;
+    @Value("${utils.cart.prefix}")
+    private String cartPrefix;
 
-    private CartNotEntity cart;
-
-    @PostConstruct
-    public void init() {
-        cart = new CartNotEntity();
+    public String getCartUuidFromSuffix(String suffix) {
+        return cartPrefix + suffix;
     }
 
-    public CartNotEntity getCurrentCart() {
-        return cart;
+    public String generateCartUuid() {
+        return UUID.randomUUID().toString();
     }
 
-    public void addNovelInCart(Long novelId) {
-        if (!getCurrentCart().isInCart(novelId)) {
-            Novel novel = novelService.getNovelById(novelId).orElseThrow(() -> new ResourceNotFoundException("Novel not found with id: " + novelId));
-            getCurrentCart().addInCart(novel);
+
+//    @PostConstruct
+//    public void init() {
+//        cart = new CartNotEntity();
+//    }
+
+    public CartNotEntity getCurrentCart(String cartKey) {
+        if (!redisTemplate.hasKey(cartKey)) {
+            redisTemplate.opsForValue().set(cartKey, new CartNotEntity());
         }
+        return (CartNotEntity) redisTemplate.opsForValue().get(cartKey);
     }
 
-    public void clear() {
-        cart.clearCart();
+    public void addNovelInCart(String cartKey, Long novelId) {
+            Novel novel = novelService.getNovelById(novelId).orElseThrow(() -> new ResourceNotFoundException("Novel not found with id: " + novelId));
+        execute(cartKey, c -> {
+            c.addInCart(novel);
+        });
     }
 
-    public void deleteFromCart(Long novelId) {
-        cart.deleteFromCart(novelId);
+    public void clearCart(String cartKey) {
+        execute(cartKey, CartNotEntity::clearCart);
+    }
+
+    public void deleteFromCart(String cartKey, Long novelId) {
+        execute(cartKey, c -> c.removeNovel(novelId));
+    }
+
+    public void decrementItem(String cartKey, Long novelId) {
+        execute(cartKey, c -> c.decrement(novelId));
+    }
+
+    public void merge(String userCartKey, String guestCartKey) {
+        CartNotEntity guestCart = getCurrentCart(guestCartKey);
+        CartNotEntity userCart = getCurrentCart(userCartKey);
+        userCart.merge(guestCart);
+        updateCart(guestCartKey, guestCart);
+        updateCart(userCartKey, userCart);
+    }
+
+    private void execute(String cartKey, Consumer<CartNotEntity> action) {
+        CartNotEntity cart = getCurrentCart(cartKey);
+        action.accept(cart);
+        redisTemplate.opsForValue().set(cartKey, cart);
+    }
+
+    public void updateCart(String cartKey, CartNotEntity cart) {
+        redisTemplate.opsForValue().set(cartKey, cart);
     }
 }

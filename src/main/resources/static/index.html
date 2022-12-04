@@ -33,6 +33,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#!/students">Students</a>
                 </li>
+                <li class="nav-item" ng-show="isUserLoggedIn()">
+                    <a class="nav-link" href="#!/orders">Мои заказы</a>
+                </li>
 
                 <li class="nav-item" ng-show="!isUserLoggedIn()">
                     <form class="align-middle" ng-submit="tryToAuth()">
@@ -62,6 +65,7 @@
     <script src="students.js"></script>
     <script src="store/novels.js"></script>
     <script src="myCart/cart.js"></script>
+    <script src="myOrders/orders.js"></script>
     <script src="welcome/welcome.js"></script>
 </div>
 

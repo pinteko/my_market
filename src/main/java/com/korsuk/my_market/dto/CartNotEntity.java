@@ -1,15 +1,10 @@
 package com.korsuk.my_market.dto;
 
-import com.korsuk.my_market.dto.NovelDto;
-import com.korsuk.my_market.dto.OrderItemDto;
 import com.korsuk.my_market.products.Novel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.data.redis.core.RedisHash;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Data
@@ -44,7 +39,7 @@ public class CartNotEntity {
       return false;
    }
 
-   public void deleteFromCart(Long id) {
+   public void decrement(Long id) {
       Iterator<OrderItemDto> iter = novelsInCart.iterator();
       while (iter.hasNext()) {
          OrderItemDto o = iter.next();
@@ -74,6 +69,24 @@ public class CartNotEntity {
    public void clearCart() {
       novelsInCart.clear();
       totalPrice = 0;
+   }
+
+   public void merge(CartNotEntity another) {
+      for (OrderItemDto anotherItem : another.novelsInCart) {
+         boolean merged = false;
+         for (OrderItemDto myItem : novelsInCart) {
+            if (myItem.getNovelId().equals(anotherItem.getNovelId())) {
+               myItem.changeQuantity(anotherItem.getQuantity());
+               merged = true;
+               break;
+            }
+         }
+         if (!merged) {
+            novelsInCart.add(anotherItem);
+         }
+      }
+      recalculate();
+      another.clearCart();
    }
 
 

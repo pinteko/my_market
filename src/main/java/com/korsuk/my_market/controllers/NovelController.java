@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/novels")
@@ -55,16 +57,6 @@ public class NovelController {
     @GetMapping("/edit/change_rating")
     public void changeRating(@RequestParam Long novel_id, @RequestParam Double delta){
         novelService.changeRating(novel_id, delta);
-    }
-
-    @GetMapping("/add_cart")
-    public void addInCart(@RequestParam Long novel_id) {
-//        Cart cart = new Cart();
-//        cart.setNovel(novelService.getNovelById(novel_id));
-//        cart.setDate(new Date(System.currentTimeMillis()));
-//        cartService.save(cart);
-        cartService.getCurrentCart().addInCart(novelService.getNovelById(novel_id).orElseThrow(() -> new ResourceNotFoundException("Novel not found with id: " + novel_id)));
-
     }
 
     @DeleteMapping("/edit/delete_novel")

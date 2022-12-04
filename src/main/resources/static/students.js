@@ -1,5 +1,5 @@
 angular.module('market-front').controller('studentsController', function ($scope, $rootScope, $http, $localStorage) {
-    const contextPath = 'http://localhost:8189/app';
+    const contextPath = 'http://localhost:8189/app/';
 
 
 

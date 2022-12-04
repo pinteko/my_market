@@ -27,7 +27,8 @@ public class OrderService {
 
     @Transactional
     public void createOrder(User user, OrderDetailsDto orderDetailsDto) {
-        CartNotEntity currentCart = cartService.getCurrentCart();
+        String cartKey = cartService.getCartUuidFromSuffix(user.getUsername());
+        CartNotEntity currentCart = cartService.getCurrentCart(cartKey);
 
         Order order = new Order();
         order.setAddress(orderDetailsDto.getAddress());
@@ -49,7 +50,7 @@ public class OrderService {
                 .collect(Collectors.toList());
         order.setItems(items);
         orderRepository.save(order);
-        cartService.clear();
+        cartService.clearCart(cartKey);
     }
 
     public List<OrderDto> findOrdersByUsername(String username) {

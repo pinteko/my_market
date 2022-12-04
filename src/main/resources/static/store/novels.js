@@ -1,5 +1,5 @@
 angular.module('market-front').controller('novelController', function ($scope, $http, $location, $localStorage) {
-    const contextPath = 'http://localhost:8189/app';
+    const contextPath = 'http://localhost:8189/app/';
 
     let current_page = 1;
     $scope.count_pages = 2;
@@ -7,7 +7,7 @@ angular.module('market-front').controller('novelController', function ($scope, $
     $scope.loadBooks = function (page, min_rating, max_rating,
                                  min_price, max_price, title_part, names, surname) {
         $http({
-            url: contextPath + '/novels',
+            url: contextPath + 'novels',
             method: 'GET',
             params: {
                 p: page,
@@ -48,21 +48,18 @@ angular.module('market-front').controller('novelController', function ($scope, $
         console.log(current_page);
     };
 
-    $scope.addNovelInCart = function (novel_id){
+    $scope.addNovelInCart = function (novelId){
         $http({
-            url: contextPath + '/novels/add_cart',
-            method: 'GET',
-            params: {
-                novel_id: novel_id,
-            }
+            url: contextPath + 'cart/' + $localStorage.springWebGuestCartId + '/add/' + novelId,
+            method: 'GET'
         }).then(function (response){
-            $scope.loadBooks();
+            $scope.loadCart();
         });
     };
 
     $scope.changeRating = function (novel_id, delta){
         $http({
-            url: contextPath + '/novels/edit/change_rating',
+            url: contextPath + 'novels/edit/change_rating',
             method: 'GET',
             params: {
                 novel_id: novel_id,
@@ -75,7 +72,7 @@ angular.module('market-front').controller('novelController', function ($scope, $
 
     $scope.showCurrentUserInfo = function (){
         $http({
-            url: contextPath + '/users/about_me',
+            url: contextPath + 'users/about_me',
             method: 'GET'
         }).then(function (response){
             $scope.aboutMe = response.data;
@@ -85,7 +82,7 @@ angular.module('market-front').controller('novelController', function ($scope, $
 
     $scope.deleteNovel = function (novel_id){
         $http({
-            url: contextPath + '/novels/edit/delete_novel',
+            url: contextPath + 'novels/edit/delete_novel',
             method: 'DELETE',
             params: {
                 novel_id: novel_id,
@@ -98,9 +95,9 @@ angular.module('market-front').controller('novelController', function ($scope, $
     $scope.createNovel = function () {
         console.log($scope.newNovel);
         console.log($scope.author);
-        $http.post(contextPath + '/novels', $scope.newNovel)
+        $http.post(contextPath + 'novels', $scope.newNovel)
             .then(function (response) {
-                window.location.href = contextPath + '/novels.html';
+                window.location.href = contextPath + 'novels.html';
                 $scope.loadBooks();
             });
     };
