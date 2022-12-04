@@ -4,7 +4,7 @@ angular.module('market-front').controller('studentsController', function ($scope
 
 
     $scope.findStudents = function () {
-        $http.get(contextPath + '/students')
+        $http.get(contextPath + 'students')
             .then(function (response) {
                 $scope.studentList = response.data;
             });

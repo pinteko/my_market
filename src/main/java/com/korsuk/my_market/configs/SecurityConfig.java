@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/novels").permitAll()
                 .antMatchers("/cart/**").permitAll()
+                .antMatchers("/statistic").authenticated()
                 .antMatchers("/orders/**").authenticated()
                 .antMatchers("/novels/users/**").hasRole("ADMIN")
                 .antMatchers("/students/**").hasAuthority("READ_PROFILE")

@@ -26,6 +26,10 @@
                 templateUrl: 'myOrders/orders.html',
                 controller: 'ordersController'
             })
+            .when('/statistic', {
+                templateUrl: 'aspect/workingTime.html',
+                controller: 'aspectController'
+            })
             .otherwise({
                 redirectTo: '/'
             });
