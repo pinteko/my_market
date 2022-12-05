@@ -25,12 +25,12 @@ public class NovelDto {
 
     private Integer count;
 
-    public NovelDto(Novel novel) {
-        this.id = novel.getId();
-        this.title = novel.getTitle();
-        this.author = new AuthorDto(novel.getAuthor());
-        this.rating = novel.getRating();
-        this.price = novel.getPrice();
+    public NovelDto(Long id, String title, AuthorDto authorDto, Double rating, Double price) {
+        this.id = id;
+        this.title = title;
+        this.author = authorDto;
+        this.rating = rating;
+        this.price = price;
     }
 
     @Override

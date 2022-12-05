@@ -1,5 +1,6 @@
 package com.korsuk.my_market.products;
 
+import com.korsuk.my_market.entities.StudentEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,7 @@ public class Novel {
     @JoinTable(name = "novel_readers",
     joinColumns = @JoinColumn(name = "novel_id"),
     inverseJoinColumns = @JoinColumn(name = "student_id"))
-    private List<Student> students;
+    private List<StudentEntity> studentEntities;
 
     @Column(name = "rating")
     private Double rating;
@@ -48,4 +49,12 @@ public class Novel {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Novel(Long id, String title, Author author, Double rating, Double price) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.rating = rating;
+        this.price = price;
+    }
 }
