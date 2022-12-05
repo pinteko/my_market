@@ -1,21 +1,24 @@
 package com.korsuk.my_market.repo;
 
-import com.korsuk.my_market.products.Student;
-import lombok.NonNull;
+import com.korsuk.my_market.entities.StudentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.lang.NonNullApi;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student, Long> {
+public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
 
-    List<Student> findAll();
+    List<StudentEntity> findAll();
 
-    Student findStudentById(Long id);
+    StudentEntity findStudentById(Long id);
 
-    Student findStudentByName(String name);
+    StudentEntity findStudentByName(String name);
+
+    @Query("select s from StudentEntity s where s.name = ?1")
+    Optional<StudentEntity> findByName(String name);
 
     void deleteStudentById(Long id);
 

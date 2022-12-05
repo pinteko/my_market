@@ -1,14 +1,16 @@
 package com.korsuk.my_market.services;
 
 import com.korsuk.my_market.dto.StudentDto;
-import com.korsuk.my_market.products.Student;
+import com.korsuk.my_market.entities.StudentEntity;
 import com.korsuk.my_market.repo.StudentRepository;
+import com.korsuk.my_market.soap.students.Student;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,48 +24,54 @@ public class StudentService {
 //    }
 
     public StudentDto getStudentById(Long id) {
-        Student student = studentRepository.findStudentById(id);
-        StudentDto studentDto = new StudentDto(student.getId(), student.getName());
+        StudentEntity studentEntity = studentRepository.findStudentById(id);
+        StudentDto studentDto = new StudentDto(studentEntity.getId(), studentEntity.getName());
         return studentDto;
     }
 
     public List<StudentDto> getAllStudent(){
-        List<Student> students = studentRepository.findAll();
-        List<StudentDto> studentsDto = students.stream().map(s -> new StudentDto(s.getId(),
+        List<StudentEntity> studentEntities = studentRepository.findAll();
+        List<StudentDto> studentsDto = studentEntities.stream().map(s -> new StudentDto(s.getId(),
                 s.getName())).collect(Collectors.toList());
         return studentsDto;
     }
 
     public StudentDto getStudentByName(String name) {
-        Student student = studentRepository.findStudentByName(name);
-        StudentDto studentDto = new StudentDto(student.getId(), student.getName());
+        StudentEntity studentEntity = studentRepository.findStudentByName(name);
+        StudentDto studentDto = new StudentDto(studentEntity.getId(), studentEntity.getName());
         return studentDto;
     }
 
 
     @Transactional
-    public Student saveStudent (@NonNull Student student) {
-       Student savedStudent = studentRepository.saveAndFlush(student);
-       return savedStudent;
+    public StudentEntity saveStudent (@NonNull StudentEntity studentEntity) {
+       StudentEntity savedStudentEntity = studentRepository.saveAndFlush(studentEntity);
+       return savedStudentEntity;
     }
 
     @Transactional
-    public Student editStudent (@NonNull Student student) {
-        return studentRepository.saveAndFlush(student);
+    public StudentEntity editStudent (@NonNull StudentEntity studentEntity) {
+        return studentRepository.saveAndFlush(studentEntity);
     }
 
     public void deleteStudent(Long id) {
         studentRepository.deleteStudentById(id);
     }
-//    public void addStudent(String name) {
-//        studentRepository.addStudent(name);
-//    }
-//
-//    public void deleteStudent(int id) {
-//        studentRepository.deleteStudent(id);
-//    }
-//
-//    public void updateStudent(int id, String name) {
-//        studentRepository.updateStudent(id, name);
-//    }
+
+    public static final Function<StudentEntity, Student> functionEntityToSoap = se -> {
+        Student s = new Student();
+        s.setId(se.getId());
+        s.setName(se.getName());
+        s.setAge(se.getAge());
+        s.setGroupTitle(se.getGroup().getTitle());
+        return s;
+    };
+
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll().stream().map(functionEntityToSoap).collect(Collectors.toList());
+    }
+
+    public Student getByName(String name) {
+        return studentRepository.findByName(name).map(functionEntityToSoap).get();
+    }
 }

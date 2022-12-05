@@ -1,5 +1,6 @@
 package com.korsuk.my_market.products;
 
+import com.korsuk.my_market.entities.StudentEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,7 @@ public class Novel {
     @JoinTable(name = "novel_readers",
     joinColumns = @JoinColumn(name = "novel_id"),
     inverseJoinColumns = @JoinColumn(name = "student_id"))
-    private List<Student> students;
+    private List<StudentEntity> studentEntities;
 
     @Column(name = "rating")
     private Double rating;
